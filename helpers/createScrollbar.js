@@ -7,6 +7,7 @@ const createScrollbar = (store, run) => {
   const hasWheelEvent = 'onwheel' in document
   const hasMouseWheelEvent = 'onmousewheel' in document
   const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
+  const hasTouch = 'ontouchstart' in document
 
   const track = options.scrollbar
   let trackRect = track.getBoundingClientRect()
@@ -25,23 +26,17 @@ const createScrollbar = (store, run) => {
 
   track.appendChild(bar)
 
-  const startDrag = (e) => {
-    onDrag(e)
-    if (e.type === 'mousedown')
-      window.addEventListener('mousemove', onDrag, { passive: false })
-    if (e.type === 'touchstart')
-      window.addEventListener('touchmove', onDrag, { passive: false })
+  const onMouseDown = (e) => {
+    onMove(e)
+    window.addEventListener('mousemove', onMove)
   }
 
-  const endDrag = (e) => {
-    if (e.type === 'mouseup')
-      window.removeEventListener('mousemove', onDrag, { passive: false })
-    if (e.type === 'touchend')
-      window.removeEventListener('touchmove', onDrag, { passive: false })
+  const onMouseUp = (e) => {
+    window.removeEventListener('mousemove', onMove)
   }
 
-  const onDrag = (e) => {
-    e.preventDefault()
+  const onMove = (e) => {
+    e.stopPropagation()
     let { limit, delta } = store.get()
     let pos = 0
     if (isVertical) {
@@ -55,6 +50,7 @@ const createScrollbar = (store, run) => {
   }
 
   const onWheel = (e) => {
+    e.stopPropagation()
     const { options } = store.get()
     let delta = e.wheelDeltaY || e.deltaY * -1
     if (isFirefox && e.deltaMode === 1) delta *= options.firefoxMult
@@ -63,6 +59,7 @@ const createScrollbar = (store, run) => {
   }
 
   const onMouseWheel = (e) => {
+    e.stopPropagation()
     let delta = e.wheelDeltaY ? e.wheelDeltaY : e.wheelDelta
     run(delta)
   }
@@ -79,10 +76,9 @@ const createScrollbar = (store, run) => {
   const init = () => {
     if (hasWheelEvent) track.addEventListener('wheel', onWheel)
     if (hasMouseWheelEvent) track.addEventListener('mousewheel', onMouseWheel)
-    track.addEventListener('touchstart', startDrag)
-    window.addEventListener('touchend', endDrag)
-    track.addEventListener('mousedown', startDrag)
-    window.addEventListener('mouseup', endDrag)
+    if (hasTouch) track.addEventListener('touchmove', onMove)
+    track.addEventListener('mousedown', onMouseDown)
+    window.addEventListener('mouseup', onMouseUp)
     update()
   }
 
@@ -91,10 +87,9 @@ const createScrollbar = (store, run) => {
     if (hasWheelEvent) track.removeEventListener('wheel', onWheel)
     if (hasMouseWheelEvent)
       track.removeEventListener('mousewheel', onMouseWheel)
-    track.removeEventListener('touchstart', startDrag)
-    window.removeEventListener('touchend', endDrag)
-    track.removeEventListener('mousedown', startDrag)
-    window.removeEventListener('mouseup', endDrag)
+    if (hasTouch) track.removeEventListener('touchmove', onMove)
+    track.removeEventListener('mousedown', onMouseDown)
+    window.removeEventListener('mouseup', onMouseUp)
   }
 
   const recalibrate = () => {

@@ -134,37 +134,39 @@ const createScrollContainer = (store, run) => {
 
   const init = () => {
     const { options } = store.get()
+    const scrollTrigger = options.scrollTrigger || options.container
     if (hasKeyDown) document.addEventListener('keydown', onKeyDown)
-    if (hasWheelEvent) options.container.addEventListener('wheel', onWheel)
+    if (hasWheelEvent) scrollTrigger.addEventListener('wheel', onWheel)
     if (hasMouseWheelEvent)
-      options.container.addEventListener('mousewheel', onMouseWheel)
+      scrollTrigger.addEventListener('mousewheel', onMouseWheel)
     if (hasTouch) {
-      options.container.addEventListener('touchstart', onTouchStart)
-      options.container.addEventListener('touchmove', onTouchMove)
+      scrollTrigger.addEventListener('touchstart', onTouchStart)
+      scrollTrigger.addEventListener('touchmove', onTouchMove)
     }
     if (hasPointer && hasTouchWin) {
       bodyTouchAction = document.body.style.msTouchAction
       document.body.style.msTouchAction = 'none'
-      options.container.addEventListener('MSPointerDown', onTouchStart, true)
-      options.container.addEventListener('MSPointerMove', onTouchMove, true)
+      scrollTrigger.addEventListener('MSPointerDown', onTouchStart, true)
+      scrollTrigger.addEventListener('MSPointerMove', onTouchMove, true)
     }
     setLimit()
   }
 
   const kill = () => {
     const { options } = store.get()
+    const scrollTrigger = options.scrollTrigger || options.container
     if (hasKeyDown) document.removeEventListener('keydown', onKeyDown)
     if (hasWheelEvent) options.container.removeEventListener('wheel', onWheel)
     if (hasMouseWheelEvent)
-      options.container.removeEventListener('mousewheel', onMouseWheel)
+      scrollTrigger.removeEventListener('mousewheel', onMouseWheel)
     if (hasTouch) {
-      options.container.removeEventListener('touchstart', onTouchStart)
-      options.container.removeEventListener('touchmove', onTouchMove)
+      scrollTrigger.removeEventListener('touchstart', onTouchStart)
+      scrollTrigger.removeEventListener('touchmove', onTouchMove)
     }
     if (hasPointer && hasTouchWin) {
       document.body.style.msTouchAction = bodyTouchAction
-      options.container.removeEventListener('MSPointerDown', onTouchStart, true)
-      options.container.removeEventListener('MSPointerMove', onTouchMove, true)
+      scrollTrigger.removeEventListener('MSPointerDown', onTouchStart, true)
+      scrollTrigger.removeEventListener('MSPointerMove', onTouchMove, true)
     }
   }
 
