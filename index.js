@@ -91,7 +91,7 @@ const controller = (props) => {
   }, 50)
 
   const recalibrate = () => {
-    const { items } = store.get()
+    const { items, options } = store.get()
     const recalibratedItems = items.map((item) => item.recalibrate(store, item))
     store.dispatch({ type: 'SET_ITEMS', payload: recalibratedItems })
     if (scrollContainer) scrollContainer.recalibrate()
@@ -176,6 +176,7 @@ const controller = (props) => {
     on,
     off,
     removeItem,
+    recalibrate,
     scrollTo,
     scrollToElement,
     update,
