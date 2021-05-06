@@ -7,18 +7,14 @@ const tweenUpdate = (store, updateVars) => {
 
   const progress = getProgress(start, distance, scroll)
 
-  let timelineProgress
-  if (peak < 1) {
-    if (progress > peak) {
-      timelineProgress = peak * 2 - progress
-    } else {
-      timelineProgress = progress * (peak * 2)
-    }
+  if (peak) {
+    timeline.progress(
+      progress > 0.5 ? 0.5 * 2 - progress : progress * (0.5 * 2)
+    )
   } else {
-    timelineProgress = progress
+    timeline.progress(progress)
   }
 
-  timeline.progress(timelineProgress)
   if (callback && typeof callback === 'function') callback(progress, scroll)
 
   updateElementClass(el, progress)

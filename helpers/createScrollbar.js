@@ -98,6 +98,7 @@ const createScrollbar = (store, run) => {
       trackRect.height > trackRect.width || trackRect.height === trackRect.width
     bar.style.right = isVertical ? '0' : '100%'
     bar.style.bottom = isVertical ? '100%' : '0'
+    update()
   }
 
   init()

@@ -1,26 +1,17 @@
-import checkInitialView from '../../../utils/checkInitialView'
-import parseUnit from '../../../utils/parseUnit'
+import inInitialView from '../../../utils/inInitialView'
+import getOffsetStart from '../../../utils/getOffsetStart'
+import getViewportHeight from '../../../utils/getViewportHeight'
 
-const getStart = (store, inputData, triggerRect, parsedOffsets) => {
-  let { start } = inputData
+const getStart = (store, el, inputData, parsedOffsets) => {
+  let { trigger = el } = inputData
+  const { container, viewport, layoutHorizontal } = store.get().options
 
-  if (start) {
-    start = parseUnit(start) + parsedOffsets.start
-  } else {
-    const { options, scroll } = store.get()
-    const { layoutHorizontal } = options
+  const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
+  const offsetStart = getOffsetStart(trigger, container, layoutHorizontal)
 
-    const screen = layoutHorizontal ? window.innerWidth : window.innerHeight
-    const offsetStart = layoutHorizontal
-      ? triggerRect.left + scroll
-      : triggerRect.top + scroll
-
-    start = checkInitialView(triggerRect, offsetStart, layoutHorizontal)
-      ? 0 + parsedOffsets.start
-      : offsetStart - screen + parsedOffsets.start
-  }
-
-  return start < 0 ? 0 : start
+  return inInitialView(el, container, viewport, layoutHorizontal)
+    ? 0 + parsedOffsets.start
+    : offsetStart - viewportHeight + parsedOffsets.start
 }
 
 export default getStart

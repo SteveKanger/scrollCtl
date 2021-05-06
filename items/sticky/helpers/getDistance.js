@@ -2,7 +2,7 @@ import getParentPadding from './getParentPadding'
 import getElementMargin from './getElementMargin'
 import parseUnit from '../../../utils/parseUnit'
 
-const getDistance = (store, el, inputData, elRect, start) => {
+const getDistance = (store, el, inputData, start) => {
   const { options, limit } = store.get()
   const { layoutHorizontal } = options
   const { distance, ignoreBounds } = inputData
@@ -12,6 +12,7 @@ const getDistance = (store, el, inputData, elRect, start) => {
     return limit - start
   }
 
+  const elRect = el.getBoundingClientRect()
   const parentPadding = getParentPadding(el)
   const elMargin = getElementMargin(el)
   const parentRect = el.parentNode.getBoundingClientRect()

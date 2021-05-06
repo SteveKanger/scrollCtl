@@ -1,50 +1,24 @@
-import checkInitialView from '../../../utils/checkInitialView'
-import parseUnit from '../../../utils/parseUnit'
+import inInitialView from '../../../utils/inInitialView'
 import getDisplacement from './getDisplacement'
+import getOffsetStart from '../../../utils/getOffsetStart'
+import getViewportHeight from '../../../utils/getViewportHeight'
 
-const getDistance = (
-  store,
-  el,
-  inputData,
-  timeline,
-  parsedOffsets,
-  elRect,
-  triggerRect
-) => {
-  let { ignoreIntialView, distance } = inputData
+const getDistance = (store, el, inputData, timeline, parsedOffsets) => {
+  let { ignoreIntialView } = inputData
+  const { container, viewport, layoutHorizontal } = store.get().options
 
-  if (distance) distance = parseUnit(distance) - parsedOffsets.total
-  else {
-    const { options, scroll } = store.get()
-    const { layoutHorizontal } = options
-    const displacement = getDisplacement(
-      store,
-      el,
-      inputData,
-      timeline,
-      elRect,
-      triggerRect
-    )
+  const displacement = getDisplacement(store, el, inputData, timeline)
+  const offsetStart = getOffsetStart(el, container, layoutHorizontal)
 
-    const offsetStart = layoutHorizontal
-      ? triggerRect.left + scroll
-      : triggerRect.top + scroll
-
-    const isInIntialView = checkInitialView(
-      triggerRect,
-      offsetStart,
-      layoutHorizontal
-    )
-
-    if (isInIntialView && !ignoreIntialView) {
-      const screen = layoutHorizontal ? window.innerWidth : window.innerHeight
-      distance = offsetStart + displacement - screen - parsedOffsets.total
-    } else {
-      distance = displacement - parsedOffsets.total
-    }
+  if (
+    inInitialView(el, container, viewport, layoutHorizontal) &&
+    !ignoreIntialView
+  ) {
+    const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
+    return offsetStart + displacement - viewportHeight - parsedOffsets.total
   }
 
-  return distance > 0 ? distance : 0
+  return displacement - parsedOffsets.total
 }
 
 export default getDistance

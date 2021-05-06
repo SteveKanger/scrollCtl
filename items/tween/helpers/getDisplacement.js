@@ -1,31 +1,30 @@
-const getDisplacement = (
-  store,
-  el,
-  inputData,
-  timeline,
-  elRect,
-  triggerRect
-) => {
-  const { trigger, peak } = inputData
-  const { layoutHorizontal } = store.get().options
+import getViewportHeight from '../../../utils/getViewportHeight'
 
-  if (trigger || peak < 1) {
-    return layoutHorizontal
-      ? triggerRect.width + window.innerWidth
-      : triggerRect.height + window.innerHeight
-  } else {
-    timeline.progress(1)
-    const elEndRect = el.getBoundingClientRect()
-    timeline.progress(0)
+const getDisplacement = (store, el, inputData, timeline) => {
+  const { trigger = el, peak } = inputData
+  const { viewport, layoutHorizontal } = store.get().options
+  const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
 
-    const added = layoutHorizontal
-      ? elEndRect.left + elEndRect.width - (elRect.left + elRect.width)
-      : elEndRect.top + elEndRect.height - (elRect.top + elRect.height)
-
-    return layoutHorizontal
-      ? elRect.width + window.innerWidth + added
-      : elRect.height + window.innerHeight + added
+  if (trigger !== el || peak) {
+    const triggerRect = trigger.getBoundingClientRect()
+    const triggerHeight = layoutHorizontal
+      ? triggerRect.width
+      : triggerRect.height
+    return triggerHeight + viewportHeight
   }
+
+  const elRect = el.getBoundingClientRect()
+  timeline.progress(1)
+  const elEndRect = el.getBoundingClientRect()
+  timeline.progress(0)
+
+  const elHeight = layoutHorizontal ? elRect.width : elRect.height
+
+  const addedHeight = layoutHorizontal
+    ? elEndRect.left + elEndRect.width - (elRect.left + elRect.width)
+    : elEndRect.top + elEndRect.height - (elRect.top + elRect.height)
+
+  return elHeight + viewportHeight + addedHeight
 }
 
 export default getDisplacement

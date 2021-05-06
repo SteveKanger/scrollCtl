@@ -1,24 +1,23 @@
+import parseUnit from '../../utils/parseUnit'
 import parseOffsets from './helpers/parseOffests'
 import getStart from './helpers/getStart'
 import getDistance from './helpers/getDistance'
 
 const tweenConstruct = (store, el, inputData, timeline) => {
-  const { trigger, offsets } = inputData
+  let { offsets, start, distance } = inputData
 
   timeline.progress(0)
-  const elRect = el.getBoundingClientRect()
-  const triggerRect = trigger ? trigger.getBoundingClientRect() : elRect
   const parsedOffsets = parseOffsets(offsets)
-  const start = getStart(store, inputData, triggerRect, parsedOffsets)
-  const distance = getDistance(
-    store,
-    el,
-    inputData,
-    timeline,
-    parsedOffsets,
-    elRect,
-    triggerRect
-  )
+
+  start = start
+    ? parseUnit(start) + parsedOffsets.start
+    : getStart(store, el, inputData, parsedOffsets)
+  start = start < 0 ? 0 : start
+
+  distance = distance
+    ? parseUnit(distance) - parsedOffsets.total
+    : getDistance(store, el, inputData, timeline, parsedOffsets)
+  distance = distance > 0 ? distance : 0
 
   return {
     start,

@@ -4,6 +4,7 @@ const assignOptions = (props) => {
       layoutHorizontal: false,
       container: null,
       scrollTrigger: null,
+      viewport: null,
       scrollbar: null,
       keyStep: 120,
       firefoxMult: 25,

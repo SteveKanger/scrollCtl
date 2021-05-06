@@ -10,7 +10,7 @@ const tweenCreate = (store, el, inputData = {}) => {
   if (!inputData.to)
     throw new Error('You need to specify a -- to -- object for tweening')
 
-  const { to, callback, peak = 1 } = inputData
+  const { to, callback, peak } = inputData
 
   const id = createId()
 

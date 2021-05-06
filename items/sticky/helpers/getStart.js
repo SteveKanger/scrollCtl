@@ -1,12 +1,11 @@
 import parseUnit from '../../../utils/parseUnit'
+import getOffsetStart from '../../../utils/getOffsetStart'
 
-const getStart = (store, inputData, elRect) => {
-  const { scroll, options } = store.get()
-  const { layoutHorizontal } = options
+const getStart = (store, el, inputData) => {
   const { offset = 0 } = inputData
+  const { container, layoutHorizontal } = store.get().options
 
-  const elStartPosition = layoutHorizontal ? elRect.left : elRect.top
-  const offsetStart = elStartPosition + scroll
+  const offsetStart = getOffsetStart(el, container, layoutHorizontal)
   const parsedOffset = parseUnit(offset)
 
   return offsetStart - parsedOffset

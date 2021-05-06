@@ -1,3 +1,6 @@
+import getContainerHeight from '../utils/getContainerHeight'
+import getViewportHeight from '../utils/getViewportHeight'
+
 const createScrollContainer = (store, run) => {
   let touchStartY
   let bodyTouchAction
@@ -91,20 +94,11 @@ const createScrollContainer = (store, run) => {
 
   const setLimit = () => {
     let { options, scroll, limit, delta } = store.get()
-    const { container, layoutHorizontal } = options
-    const containerRect = container.getBoundingClientRect()
-    const containerBeginning = layoutHorizontal
-      ? containerRect.left
-      : containerRect.top
-    const containerEnd = layoutHorizontal
-      ? containerRect.right
-      : containerRect.bottom
-    const containerBounds = Math.round(
-      Math.abs(containerBeginning) + containerEnd
-    )
-    const screen = layoutHorizontal ? window.innerWidth : window.innerHeight
-    limit = containerBounds - screen
-    if (containerBounds < screen) {
+    const { viewport, container, layoutHorizontal } = options
+    const containerHeight = getContainerHeight(container, layoutHorizontal)
+    const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
+    limit = containerHeight - viewportHeight
+    if (containerHeight < viewportHeight) {
       limit = delta = scroll = 0
     } else if (scroll > limit) {
       delta = scroll = limit
