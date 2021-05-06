@@ -19,8 +19,6 @@ const tweenConstruct = (store, el, inputData, timeline) => {
     : getDistance(store, el, inputData, timeline, parsedOffsets)
   distance = distance > 0 ? distance : 0
 
-  console.log(start)
-
   return {
     start,
     distance,
