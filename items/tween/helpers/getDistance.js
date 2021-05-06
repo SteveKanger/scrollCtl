@@ -4,14 +4,14 @@ import getOffsetStart from '../../../utils/getOffsetStart'
 import getViewportHeight from '../../../utils/getViewportHeight'
 
 const getDistance = (store, el, inputData, timeline, parsedOffsets) => {
-  let { ignoreIntialView } = inputData
+  let { ignoreIntialView, trigger = el } = inputData
   const { container, viewport, layoutHorizontal } = store.get().options
 
   const displacement = getDisplacement(store, el, inputData, timeline)
-  const offsetStart = getOffsetStart(el, container, layoutHorizontal)
+  const offsetStart = getOffsetStart(trigger, container, layoutHorizontal)
 
   if (
-    inInitialView(el, container, viewport, layoutHorizontal) &&
+    inInitialView(trigger, container, viewport, layoutHorizontal) &&
     !ignoreIntialView
   ) {
     const viewportHeight = getViewportHeight(viewport, layoutHorizontal)

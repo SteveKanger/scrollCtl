@@ -9,7 +9,7 @@ const getStart = (store, el, inputData, parsedOffsets) => {
   const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
   const offsetStart = getOffsetStart(trigger, container, layoutHorizontal)
 
-  return inInitialView(el, container, viewport, layoutHorizontal)
+  return inInitialView(trigger, container, viewport, layoutHorizontal)
     ? 0 + parsedOffsets.start
     : offsetStart - viewportHeight + parsedOffsets.start
 }
