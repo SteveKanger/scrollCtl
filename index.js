@@ -84,6 +84,12 @@ const controller = (props) => {
     }
   }
 
+  const clearItems = () => {
+    const { items } = store.get()
+    items.forEach((item) => item.kill(item.updateVars))
+    store.dispatch({ type: 'SET_ITEMS', payload: [] })
+  }
+
   const resize = debounce(() => {
     const { scroll } = store.get()
     recalibrate()
@@ -169,14 +175,15 @@ const controller = (props) => {
   return {
     addSticky,
     addTween,
+    clearItems,
     getScroll,
     init,
     kill,
     modifyItem,
     on,
     off,
-    removeItem,
     recalibrate,
+    removeItem,
     scrollTo,
     scrollToElement,
     update,

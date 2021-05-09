@@ -7,7 +7,7 @@ const getContainerHeight = (container, layoutHorizontal) => {
     ? containerRect.right
     : containerRect.bottom
 
-  return Math.round(Math.abs(containerEnd) - containerBeginning)
+  return Math.round(Math.abs(containerBeginning) + containerEnd)
 }
 
 export default getContainerHeight

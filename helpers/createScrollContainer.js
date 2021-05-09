@@ -150,7 +150,7 @@ const createScrollContainer = (store, run) => {
     const { options } = store.get()
     const scrollTrigger = options.scrollTrigger || options.container
     if (hasKeyDown) document.removeEventListener('keydown', onKeyDown)
-    if (hasWheelEvent) options.container.removeEventListener('wheel', onWheel)
+    if (hasWheelEvent) scrollTrigger.removeEventListener('wheel', onWheel)
     if (hasMouseWheelEvent)
       scrollTrigger.removeEventListener('mousewheel', onMouseWheel)
     if (hasTouch) {
