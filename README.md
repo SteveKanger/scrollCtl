@@ -22,9 +22,6 @@ Smooth scrolling wrapper for gsap tweens
    yarn add gsap
    ```
 
-\
-&nbsp;
-
 ## Usage
 
 ### Simple scrolling container
@@ -39,9 +36,6 @@ const ctl = scrollbase({
   container,
 })
 ```
-
-\
-&nbsp;
 
 ### Scroll container with custom viewport and scrollbar
 
@@ -116,9 +110,6 @@ ctl.addTween({
   },
 })
 ```
-
-\
-&nbsp;
 
 ### Adding Sticky on scroll
 
