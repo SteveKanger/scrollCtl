@@ -94,6 +94,10 @@ this can be customized to your liking
 
 ### Adding tweens on scroll
 
+Uses gsap's timeline and the `to` object. Check the documentation below for available params.
+
+[`GSAP Timeline to()`](<https://greensock.com/docs/v3/GSAP/Timeline/to()>)
+
 #### JS
 
 ```js
