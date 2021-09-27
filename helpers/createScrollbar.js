@@ -1,30 +1,24 @@
-import isElement from '../utils/isElement'
+import VirtualScroll from './VirtualScroll'
+import createStore from '../store/createStore'
+import scrollbarState from '../store/scrollbarState'
 
-const createScrollbar = (store, run) => {
-  const { options } = store.get()
-  if (!isElement(options.scrollbar)) return null
+const createScrollbar = (appStore, render) => {
+  const { options } = appStore.get()
+  if (!options.scrollbar) return
 
-  const hasWheelEvent = 'onwheel' in document
-  const hasMouseWheelEvent = 'onmousewheel' in document
-  const isFirefox = navigator.userAgent.indexOf('Firefox') > -1
-  const hasTouch = 'ontouchstart' in document
+  const scrollbarStore = createStore({ ...scrollbarState })
+  const vs = VirtualScroll({
+    ...options,
+    container: options.scrollbar,
+    preventKeyStep: true,
+  })
 
-  const track = options.scrollbar
-  let trackRect = track.getBoundingClientRect()
-  let isVertical =
-    trackRect.height > trackRect.width || trackRect.height === trackRect.width
-
-  const bar = document.createElement('span')
-  bar.classList = 'bar'
-  bar.style.display = 'block'
-  bar.style.width = '100%'
-  bar.style.height = '100%'
-  bar.style.position = 'absolute'
-  bar.style.right = isVertical ? '0' : '100%'
-  bar.style.bottom = isVertical ? '100%' : '0'
-  bar.style.pointerEvents = 'none'
-
-  track.appendChild(bar)
+  const isVertical = () => {
+    const { trackRect } = scrollbarStore.get()
+    return (
+      trackRect.height > trackRect.width || trackRect.height === trackRect.width
+    )
+  }
 
   const onMouseDown = (e) => {
     onMove(e)
@@ -37,67 +31,76 @@ const createScrollbar = (store, run) => {
 
   const onMove = (e) => {
     e.stopPropagation()
-    let { limit, delta } = store.get()
+    const { trackRect } = scrollbarStore.get()
+    let { limit, delta } = appStore.get()
+
     let pos = 0
-    if (isVertical) {
+    let deltaY
+    if (isVertical()) {
       pos = e.touches ? e.touches[0].pageY : e.clientY
-      delta = (limit / trackRect.height) * (trackRect.top - pos) + delta
+      deltaY = (limit / trackRect.height) * (trackRect.top - pos) + delta
     } else {
       pos = e.touches ? e.touches[0].pageX : e.clientX
-      delta = (limit / trackRect.width) * (trackRect.left - pos) + delta
+      deltaY = (limit / trackRect.width) * (trackRect.left - pos) + delta
     }
-    run(delta)
-  }
 
-  const onWheel = (e) => {
-    e.stopPropagation()
-    const { options } = store.get()
-    let delta = e.wheelDeltaY || e.deltaY * -1
-    if (isFirefox && e.deltaMode === 1) delta *= options.firefoxMult
-    delta *= options.mouseMult
-    run(delta)
-  }
-
-  const onMouseWheel = (e) => {
-    e.stopPropagation()
-    let delta = e.wheelDeltaY ? e.wheelDeltaY : e.wheelDelta
-    run(delta)
-  }
-
-  const update = () => {
-    const { scroll, limit } = store.get()
-    const scrollbarLimit = isVertical ? trackRect.height : trackRect.width
-    const pos = (scroll / limit) * scrollbarLimit
-    bar.style.transform = isVertical
-      ? `translate3d(0,${pos}px,0)`
-      : `translate3d(${pos}px,0,0)`
+    render({ deltaY })
   }
 
   const init = () => {
-    if (hasWheelEvent) track.addEventListener('wheel', onWheel)
-    if (hasMouseWheelEvent) track.addEventListener('mousewheel', onMouseWheel)
-    if (hasTouch) track.addEventListener('touchmove', onMove)
+    const track = document.createElement('div')
+    track.classList = 'track'
+    track.style.display = 'block'
+    track.style.position = 'relative'
+    track.style.width = '100%'
+    track.style.height = '100%'
+    track.style.overflow = 'hidden'
+    options.scrollbar.appendChild(track)
+    scrollbarStore.set('track', track)
+    scrollbarStore.set('trackRect', track.getBoundingClientRect())
+
+    const bar = document.createElement('span')
+    bar.classList = 'bar'
+    bar.style.display = 'block'
+    bar.style.width = '100%'
+    bar.style.height = '100%'
+    bar.style.position = 'absolute'
+    bar.style.right = isVertical() ? '0' : '100%'
+    bar.style.bottom = isVertical() ? '100%' : '0'
+    bar.style.pointerEvents = 'none'
+    track.appendChild(bar)
+    scrollbarStore.set('bar', bar)
+
     track.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mouseup', onMouseUp)
-    update()
+    vs.on(render)
   }
 
   const kill = () => {
-    bar.remove()
-    if (hasWheelEvent) track.removeEventListener('wheel', onWheel)
-    if (hasMouseWheelEvent)
-      track.removeEventListener('mousewheel', onMouseWheel)
-    if (hasTouch) track.removeEventListener('touchmove', onMove)
+    const { track } = scrollbarStore.get()
+    vs.off(render)
     track.removeEventListener('mousedown', onMouseDown)
     window.removeEventListener('mouseup', onMouseUp)
+    track.remove()
+  }
+
+  const update = () => {
+    const { scroll, limit } = appStore.get()
+    const { bar, trackRect } = scrollbarStore.get()
+    const scrollbarLimit = isVertical() ? trackRect.height : trackRect.width
+
+    const pos = (scroll / limit) * scrollbarLimit
+    bar.style.transform = isVertical()
+      ? `translateY(${pos}px)`
+      : `translateX(${pos}px)`
   }
 
   const recalibrate = () => {
-    trackRect = track.getBoundingClientRect()
-    isVertical =
-      trackRect.height > trackRect.width || trackRect.height === trackRect.width
-    bar.style.right = isVertical ? '0' : '100%'
-    bar.style.bottom = isVertical ? '100%' : '0'
+    const { track, bar } = scrollbarStore.get()
+    scrollbarStore.set('trackRect', track.getBoundingClientRect())
+
+    bar.style.right = isVertical() ? '0' : '100%'
+    bar.style.bottom = isVertical() ? '100%' : '0'
     update()
   }
 

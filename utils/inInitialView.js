@@ -5,12 +5,10 @@ const inInitialView = (el, container, viewport, layoutHorizontal) => {
   const elRect = el.getBoundingClientRect()
   const offsetStart = getOffsetStart(el, container, layoutHorizontal)
   const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
-  const elEnd = layoutHorizontal ? elRect.right : elRect.bottom
   const elHeight = layoutHorizontal ? elRect.width : elRect.height
+  const elEnd = offsetStart + elHeight
 
-  return offsetStart < viewportHeight && elEnd <= viewportHeight + elHeight
-    ? true
-    : false
+  return offsetStart < viewportHeight && elEnd <= viewportHeight ? true : false
 }
 
 export default inInitialView

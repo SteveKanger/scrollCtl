@@ -1,15 +1,12 @@
-const createStore = (reducer, initialState) => {
-  let state = initialState
+const createStore = (initialState) => {
+  const state = initialState
 
-  const dispatch = (action) => {
-    state = reducer(action, state)
-  }
-
+  const set = (key, value) => (state[key] = value)
   const get = () => state
 
   return {
     get,
-    dispatch,
+    set,
   }
 }
 

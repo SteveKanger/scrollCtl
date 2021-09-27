@@ -6,10 +6,7 @@ const getViewportHeight = (viewport, layoutHorizontal) => {
       throw new Error('The viewport option needs to be a valid elememt')
 
     const rect = viewport.getBoundingClientRect()
-    const elStart = layoutHorizontal ? rect.left : rect.top
-    const elEnd = layoutHorizontal ? rect.right : rect.bottom
-
-    return elEnd - elStart
+    return layoutHorizontal ? rect.width : rect.height
   }
 
   return layoutHorizontal ? window.innerWidth : window.innerHeight
