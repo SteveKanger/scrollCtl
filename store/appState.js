@@ -10,6 +10,7 @@ const initialState = {
   items: [],
   options: {
     layoutHorizontal: false,
+    viewport: null,
     container: null,
     scrollbar: null,
     keyStep: 120,

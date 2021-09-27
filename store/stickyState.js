@@ -4,6 +4,7 @@ const stickyStore = {
   distance: 0,
   callback: () => {},
   ignoreBounds: false,
+  offsets: null,
 }
 
 export default stickyStore

@@ -6,7 +6,6 @@ import handleInitialize from './handlers/handleInitialize'
 import handleKill from './handlers/handleKill'
 import handleResize from './handlers/handleResize'
 import handleRecalibrate from './handlers/handleRecalibrate'
-import handleRestart from './handlers/handleRestart'
 import handleAddTween from './handlers/handleAddTween'
 import handleAddSticky from './handlers/handleAddSticky'
 import handleRemoveItem from './handlers/handleRemoveItem'
@@ -28,7 +27,6 @@ const scrollController = (opts) => {
   const resize = debounce(() => handleResize(appStore), 100)
   const initialize = () => handleInitialize(appStore, render, resize, opts)
   const recalibrate = () => handleRecalibrate(appStore)
-  const restart = () => handleRestart(appStore)
   const getScroll = () => appStore.get().scroll
   const on = (e, fn) => appStore.get().listeners.on(e, fn)
   const off = (e, fn) => appStore.get().listeners.off(e, fn)
@@ -50,9 +48,7 @@ const scrollController = (opts) => {
     addSticky,
     removeItem,
     kill,
-    resize,
     recalibrate,
-    restart,
     on,
     off,
     getScroll,
