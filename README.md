@@ -41,7 +41,7 @@ const ctl = scrollbase({
 
 Good practice to add a clearfix or and overflow property to the container to ensure margins are calculated.
 
-````css
+```css
 .container:before,
 .container:after {
   display: block;
@@ -50,23 +50,24 @@ Good practice to add a clearfix or and overflow property to the container to ens
   visibility: hidden;
   height: 0;
 }
+```
 
 ### Scroll container with custom viewport and scrollbar
 
 #### JS
 
 ```js
-import scrollbase from './scrollbase'
+import scrollbase from './scrollbase';
 
-const scrollbar = document.querySelector('.scrollbar')
-const viewport = document.querySelector('.viewport')
-const container = document.querySelector('.container')
+const scrollbar = document.querySelector('.scrollbar');
+const viewport = document.querySelector('.viewport');
+const container = document.querySelector('.container');
 const ctl = scrollbase({
   scrollbar,
   viewport,
   container,
-})
-````
+});
+```
 
 ##### HTML
 
