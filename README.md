@@ -29,13 +29,27 @@ Smooth scrolling wrapper for gsap tweens
 #### JS
 
 ```js
-import scrollbase from './scrollbase'
+import scrollbase from './scrollbase';
 
-const container = document.querySelector('.container')
+const container = document.querySelector('.container');
 const ctl = scrollbase({
   container,
-})
+});
 ```
+
+##### Css
+
+Good practice to add a clearfix or and overflow property to the container to ensure margins are calculated.
+
+````css
+.container:before,
+.container:after {
+  display: block;
+  clear: both;
+  content: '\a0 ';
+  visibility: hidden;
+  height: 0;
+}
 
 ### Scroll container with custom viewport and scrollbar
 
@@ -52,7 +66,7 @@ const ctl = scrollbase({
   viewport,
   container,
 })
-```
+````
 
 ##### HTML
 
@@ -103,16 +117,16 @@ Uses gsap's timeline and the `to` object. Check the link below for documentation
 ```js
 const ctl = scrollbase({
   container,
-})
+});
 
 // translateY tween div 200px
-const div = document.querySelector('.tween')
+const div = document.querySelector('.tween');
 ctl.addTween({
   el: div,
   to: {
     y: '200px',
   },
-})
+});
 ```
 
 ### Adding Sticky on scroll
@@ -122,13 +136,13 @@ ctl.addTween({
 ```js
 const ctl = scrollbase({
   container,
-})
+});
 
 // Acts like position sticky css
-const div = document.querySelector('.sticky')
+const div = document.querySelector('.sticky');
 ctl.addSticky({
   el: div,
-})
+});
 ```
 
 ## Controller options
