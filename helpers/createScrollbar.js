@@ -20,13 +20,17 @@ const createScrollbar = (appStore, render) => {
     )
   }
 
+  const preventSelect = (e) => e.preventDefault()
+
   const onMouseDown = (e) => {
     onMove(e)
     window.addEventListener('mousemove', onMove)
+    window.addEventListener('selectstart', preventSelect)
   }
 
   const onMouseUp = (e) => {
     window.removeEventListener('mousemove', onMove)
+    window.removeEventListener('selectstart', preventSelect)
   }
 
   const onMove = (e) => {
