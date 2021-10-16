@@ -109,9 +109,9 @@ this can be customized to your liking
 
 ### Adding tweens on scroll
 
-Uses gsap's timeline and the `to` object. Check the link below for documentation.
+For tweening we use gsap's `timeline` and the `to` and `from` objects. A to object and a valid dom node are required for tweening. Check the link below for documentation on gsap's `timeline` and pay special attention to the `to()` and `from()` methods.
 
-[`GSAP Timeline to()`](<https://greensock.com/docs/v3/GSAP/Timeline/to()>)
+[`GSAP Timeline`](https://greensock.com/docs/v3/GSAP/Timeline)
 
 #### JS
 

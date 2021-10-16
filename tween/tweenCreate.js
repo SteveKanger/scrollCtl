@@ -1,4 +1,4 @@
-import { gsap, Linear } from 'gsap'
+import { gsap } from 'gsap'
 import tweenState from '../store/tweenState'
 import createStore from '../store/createStore'
 import createId from '../utils/createId'
@@ -6,6 +6,11 @@ import tweenConstruct from './tweenConstruct'
 import tweenUpdate from './tweenUpdate'
 import parseOffsets from '../utils/parseOffsets'
 import isElement from '../utils/isElement'
+
+gsap.defaults({
+  ease: 'none',
+  duration: 1,
+})
 
 const tweenCreate = (appStore, data) => {
   if (!data.to)
@@ -25,8 +30,7 @@ const tweenCreate = (appStore, data) => {
 
   const timeline = gsap
     .timeline({ paused: true })
-    .duration(1)
-    .fromTo(el, from ? from : {}, { ...to, ease: Linear.easeNone })
+    .fromTo(el, from ? from : {}, to)
     .progress(0)
 
   tweenStore.set('timeline', timeline)
