@@ -39,7 +39,7 @@ const ctl = scrollbase({
 
 ##### Css
 
-Good practice to add a clearfix or and overflow property to the container to ensure margins are calculated.
+Good practice to add a clearfix or an overflow property to the container to ensure margins are calculated.
 
 ```css
 .container:before,
