@@ -17,7 +17,8 @@ const tweenCreate = (appStore, data) => {
       'You need to specify a valid dom node to add a tween to controller'
     )
 
-  const { el, to, trigger, offsets, ignoreInitialView, peak, callback } = data
+  const { el, to, from, trigger, offsets, ignoreInitialView, peak, callback } =
+    data
 
   const id = createId()
   const tweenStore = createStore({ ...tweenState })
@@ -25,7 +26,7 @@ const tweenCreate = (appStore, data) => {
   const timeline = gsap
     .timeline({ paused: true })
     .duration(1)
-    .to(el, { ...to, ease: Linear.easeNone })
+    .fromTo(el, from ? from : {}, { ...to, ease: Linear.easeNone })
     .progress(0)
 
   tweenStore.set('timeline', timeline)
