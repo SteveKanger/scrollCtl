@@ -7,7 +7,7 @@ const tweenUpdate = (appStore, tweenStore) => {
 
   const progress = getProgress(start, distance, scroll)
 
-  if (peak) {
+  if (peak < 1) {
     timeline.progress(
       progress > 0.5 ? 0.5 * 2 - progress : progress * (0.5 * 2)
     )

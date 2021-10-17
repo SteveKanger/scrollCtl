@@ -1,12 +1,16 @@
 import VirtualScroll from './VirtualScroll'
-import createStore from '../store/createStore'
-import scrollbarState from '../store/scrollbarState'
+import createStore from './createStore'
 
 const createScrollbar = (appStore, render) => {
   const { options } = appStore.get()
   if (!options.scrollbar) return
 
-  const scrollbarStore = createStore({ ...scrollbarState })
+  const scrollbarStore = createStore({
+    bar: null,
+    track: null,
+    trackRect: null,
+  })
+
   const vs = VirtualScroll({
     ...options,
     container: options.scrollbar,

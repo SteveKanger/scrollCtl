@@ -1,51 +1,58 @@
-import { gsap } from 'gsap'
-import tweenState from '../store/tweenState'
-import createStore from '../store/createStore'
+import createStore from '../helpers/createStore'
 import createId from '../utils/createId'
 import tweenConstruct from './tweenConstruct'
 import tweenUpdate from './tweenUpdate'
-import parseOffsets from '../utils/parseOffsets'
 import isElement from '../utils/isElement'
-
-gsap.defaults({
-  ease: 'none',
-  duration: 1,
-})
+import setData from './setData'
+import modifyData from './modifyData'
 
 const tweenCreate = (appStore, data) => {
   if (!data.to)
-    throw new Error(
-      'You need to specify a -- to -- object for tweening and a valid dom node'
-    )
+    throw new Error('You need to specify a -- to -- object for tweening')
+
   if (!data.el || !isElement(data.el))
     throw new Error(
       'You need to specify a valid dom node to add a tween to controller'
     )
 
-  const { el, to, from, trigger, offsets, ignoreInitialView, peak, callback } =
-    data
+  const tweenStore = createStore({
+    data: null,
+    el: null,
+    to: {},
+    from: {},
+    trigger: null,
+    start: 0,
+    distance: 0,
+    timeline: () => {},
+    peak: 1,
+    ignoreInitialView: false,
+    callback: () => {},
+    offsets: {
+      start: 0,
+      end: 0,
+      total: 0,
+    },
+  })
 
   const id = createId()
-  const tweenStore = createStore({ ...tweenState })
+  setData(tweenStore, data)
 
-  const timeline = gsap
-    .timeline({ paused: true })
-    .fromTo(el, from ? from : {}, to)
-    .progress(0)
-
-  tweenStore.set('timeline', timeline)
-  tweenStore.set('el', el)
-  tweenStore.set('trigger', trigger || el)
-  tweenStore.set('offsets', parseOffsets(offsets))
-  if (ignoreInitialView) tweenStore.set('ignoreIntialView', ignoreInitialView)
-  if (peak) tweenStore.set('peak', peak)
-  if (callback) tweenStore.set('callback', callback)
-
-  const construct = () => tweenConstruct(appStore, tweenStore, data)
+  const construct = () => tweenConstruct(appStore, tweenStore)
   const update = () => tweenUpdate(appStore, tweenStore)
-  const kill = () => timeline.kill()
+
+  const kill = () => {
+    const { timeline } = tweenStore.get()
+    timeline.kill()
+  }
+
   const recalibrate = () => {
-    tweenConstruct(appStore, tweenStore, data)
+    construct()
+    update()
+  }
+
+  const modify = (newData) => {
+    modifyData(tweenStore, newData)
+    construct()
     update()
   }
 
@@ -55,6 +62,7 @@ const tweenCreate = (appStore, data) => {
     id,
     update,
     recalibrate,
+    modify,
     kill,
   }
 }

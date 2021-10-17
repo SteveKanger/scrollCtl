@@ -5,7 +5,7 @@ const getDisplacement = (appStore, tweenStore) => {
   const { viewport, layoutHorizontal } = appStore.get().options
   const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
 
-  if (trigger !== el || peak) {
+  if (trigger !== el || peak < 1) {
     const triggerRect = trigger.getBoundingClientRect()
     const triggerHeight = layoutHorizontal
       ? triggerRect.width

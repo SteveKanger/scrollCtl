@@ -1,6 +1,5 @@
 import getParentPadding from '../utils/getParentPadding'
 import getElementMargin from '../utils/getElementMargin'
-import parseUnit from '../utils/parseUnit'
 
 const getDistance = (appStore, stickyStore) => {
   const { options, limit } = appStore.get()
@@ -8,7 +7,8 @@ const getDistance = (appStore, stickyStore) => {
   const { el, offsets, start, ignoreBounds } = stickyStore.get()
 
   if (ignoreBounds) {
-    return limit - start
+    stickyStore.set('distance', limit - start - offsets.end)
+    return
   }
 
   const elRect = el.getBoundingClientRect()

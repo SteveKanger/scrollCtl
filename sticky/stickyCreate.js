@@ -1,10 +1,10 @@
 import isElement from '../utils/isElement'
 import createId from '../utils/createId'
-import parseOffsets from '../utils/parseOffsets'
-import createStore from '../store/createStore'
-import stickyState from '../store/stickyState'
+import createStore from '../helpers/createStore'
 import stickyUpdate from './stickyUpdate'
 import stickyConstruct from './stickyConstruct'
+import setData from './setData'
+import modifyData from './modifyData'
 
 const stickyCreate = (appStore, data) => {
   if (!data.el || !isElement(data.el))
@@ -12,17 +12,28 @@ const stickyCreate = (appStore, data) => {
       'You need to specify a valid dom node to add a tween to controller'
     )
 
-  const { el, offsets } = data
+  const stickyStore = createStore({
+    el: null,
+    start: 0,
+    distance: 0,
+    callback: () => {},
+    ignoreBounds: false,
+    offsets: null,
+  })
 
   const id = createId()
-  const stickyStore = createStore({ ...stickyState })
-  stickyStore.set('el', el)
-  stickyStore.set('offsets', parseOffsets(offsets))
+  setData(stickyStore, data)
 
   const construct = () => stickyConstruct(appStore, stickyStore)
   const update = () => stickyUpdate(appStore, stickyStore)
   const kill = () => {}
   const recalibrate = () => construct()
+
+  const modify = (newData) => {
+    modifyData(stickyStore, newData)
+    construct()
+    update()
+  }
 
   construct()
 
@@ -31,6 +42,7 @@ const stickyCreate = (appStore, data) => {
     update,
     kill,
     recalibrate,
+    modify,
   }
 }
 

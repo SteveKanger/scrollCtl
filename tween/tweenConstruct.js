@@ -2,9 +2,9 @@ import parseUnit from '../utils/parseUnit'
 import getStart from './getStart'
 import getDistance from './getDistance'
 
-const tweenConstruct = (appStore, tweenStore, data) => {
+const tweenConstruct = (appStore, tweenStore) => {
+  const { timeline, offsets, data } = tweenStore.get()
   let { start, distance } = data
-  const { timeline, offsets } = tweenStore.get()
   timeline.progress(0)
 
   start = start

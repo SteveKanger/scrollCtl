@@ -1,5 +1,4 @@
-import appState from './store/appState'
-import createStore from './store/createStore'
+import createStore from './helpers/createStore'
 import handleRender from './handlers/handleRender'
 import handleUpdate from './handlers/handleUpdate'
 import handleInitialize from './handlers/handleInitialize'
@@ -9,6 +8,7 @@ import handleRecalibrate from './handlers/handleRecalibrate'
 import handleAddTween from './handlers/handleAddTween'
 import handleAddSticky from './handlers/handleAddSticky'
 import handleRemoveItem from './handlers/handleRemoveItem'
+import handleModifyItem from './handlers/handleModifyItem'
 import handleScrollTo from './handlers/handleScrollTo'
 import handleScrollToElement from './handlers/handleScrollToElement'
 import debounce from './utils/debounce'
@@ -20,7 +20,28 @@ const scrollController = (opts) => {
       'A valid container element is required to initialize the scroll controller'
     )
 
-  const appStore = createStore({ ...appState })
+  const appStore = createStore({
+    initialized: false,
+    listeners: null,
+    scrollbar: null,
+    container: null,
+    aF: null,
+    limit: 0,
+    delta: 0,
+    scroll: 0,
+    items: [],
+    options: {
+      layoutHorizontal: false,
+      viewport: null,
+      container: null,
+      scrollbar: null,
+      keyStep: 120,
+      firefoxMult: 25,
+      touchMult: 2,
+      mouseMult: 1,
+      ease: 0.06,
+    },
+  })
 
   const update = () => handleUpdate(appStore)
   const render = (e) => handleRender(appStore, update, e)
@@ -34,6 +55,7 @@ const scrollController = (opts) => {
   const addTween = (data) => handleAddTween(appStore, data)
   const addSticky = (data) => handleAddSticky(appStore, data)
   const removeItem = (id) => handleRemoveItem(appStore, id)
+  const modifyItem = (id, data) => handleModifyItem(appStore, id, data)
   const scrollTo = (position, useAnimation) =>
     handleScrollTo(appStore, update, render, position, useAnimation)
   const scrollToElement = (el, offset, useAnimation) =>
@@ -47,6 +69,7 @@ const scrollController = (opts) => {
     addTween,
     addSticky,
     removeItem,
+    modifyItem,
     kill,
     recalibrate,
     on,
