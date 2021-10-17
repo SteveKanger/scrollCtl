@@ -3,11 +3,11 @@ import getOffsetStart from '../utils/getOffsetStart'
 import inInitialView from '../utils/inInitialView'
 import getViewportHeight from '../utils/getViewportHeight'
 
-const getDistance = (appStore, tweenStore) => {
-  const { container, viewport, layoutHorizontal } = appStore.get().options
-  const { trigger, ignoreIntialView, offsets } = tweenStore.get()
+const getDistance = (controllerVars, tweenVars) => {
+  const { container, viewport, layoutHorizontal } = controllerVars.get().options
+  const { trigger, ignoreIntialView, offsets } = tweenVars.get()
 
-  const displacement = getDisplacement(appStore, tweenStore)
+  const displacement = getDisplacement(controllerVars, tweenVars)
   const offsetStart = getOffsetStart(trigger, container, layoutHorizontal)
 
   if (

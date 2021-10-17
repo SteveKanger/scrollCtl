@@ -1,5 +1,6 @@
-const handleUpdate = (appStore) => {
-  const { container, scrollbar, items, listeners, scroll } = appStore.get()
+const handleUpdate = (controllerVars) => {
+  const { container, scrollbar, items, listeners, scroll } =
+    controllerVars.get()
 
   if (scrollbar) scrollbar.update()
   container.update()

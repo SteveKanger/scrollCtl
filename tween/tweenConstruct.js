@@ -2,23 +2,23 @@ import parseUnit from '../utils/parseUnit'
 import getStart from './getStart'
 import getDistance from './getDistance'
 
-const tweenConstruct = (appStore, tweenStore) => {
-  const { timeline, offsets, data } = tweenStore.get()
+const tweenConstruct = (controllerVars, tweenVars) => {
+  const { timeline, offsets, data } = tweenVars.get()
   let { start, distance } = data
   timeline.progress(0)
 
   start = start
     ? parseUnit(start) + offsets.start
-    : getStart(appStore, tweenStore)
+    : getStart(controllerVars, tweenVars)
   start = start < 0 ? 0 : start
 
   distance = distance
     ? parseUnit(distance) - offsets.total
-    : getDistance(appStore, tweenStore)
+    : getDistance(controllerVars, tweenVars)
   distance = distance > 0 ? distance : 0
 
-  tweenStore.set('start', start)
-  tweenStore.set('distance', distance)
+  tweenVars.set('start', start)
+  tweenVars.set('distance', distance)
 }
 
 export default tweenConstruct

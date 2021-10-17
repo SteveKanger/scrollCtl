@@ -1,12 +1,12 @@
 import parseOffsets from '../utils/parseOffsets'
 
-const setData = (stickyStore, data) => {
+const setData = (stickyVars, data) => {
   const { el, offsets, ignoreBounds = false, callback = () => {} } = data
 
-  stickyStore.set('el', el)
-  stickyStore.set('offsets', parseOffsets(offsets))
-  stickyStore.set('ignoreBounds', ignoreBounds)
-  stickyStore.set('callback', callback)
+  stickyVars.set('el', el)
+  stickyVars.set('offsets', parseOffsets(offsets))
+  stickyVars.set('ignoreBounds', ignoreBounds)
+  stickyVars.set('callback', callback)
 }
 
 export default setData

@@ -10,7 +10,7 @@ const assignOptions = (props) => {
       firefoxMult: 25,
       touchMult: 2,
       mouseMult: 1,
-      ease: 0.08,
+      ease: 0.06,
     },
     props
   )

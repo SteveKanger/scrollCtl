@@ -2,12 +2,12 @@ import VirtualScroll from './VirtualScroll'
 import getElementHeight from '../utils/getElementHeight'
 import getViewportHeight from '../utils/getViewportHeight'
 
-const createContainer = (appStore, render) => {
-  const { options } = appStore.get()
+const createContainer = (controllerVars, render) => {
+  const { options } = controllerVars.get()
   const vs = VirtualScroll(options)
 
   const setLimit = () => {
-    let { scroll, limit, delta } = appStore.get()
+    let { scroll, limit, delta } = controllerVars.get()
     const { viewport, container, layoutHorizontal } = options
 
     const containerHeight = getElementHeight(container, layoutHorizontal)
@@ -20,15 +20,15 @@ const createContainer = (appStore, render) => {
       delta = scroll = limit
     }
 
-    appStore.set('limit', limit)
-    appStore.set('delta', delta)
-    appStore.set('scroll', scroll)
+    controllerVars.set('limit', limit)
+    controllerVars.set('delta', delta)
+    controllerVars.set('scroll', scroll)
 
     update()
   }
 
   const update = () => {
-    const { scroll, options } = appStore.get()
+    const { scroll, options } = controllerVars.get()
     const { layoutHorizontal } = options
 
     options.container.style.transform = layoutHorizontal

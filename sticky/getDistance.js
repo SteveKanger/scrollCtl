@@ -1,13 +1,13 @@
 import getParentPadding from '../utils/getParentPadding'
 import getElementMargin from '../utils/getElementMargin'
 
-const getDistance = (appStore, stickyStore) => {
-  const { options, limit } = appStore.get()
+const getDistance = (controllerVars, stickyVars) => {
+  const { options, limit } = controllerVars.get()
   const { layoutHorizontal } = options
-  const { el, offsets, start, ignoreBounds } = stickyStore.get()
+  const { el, offsets, start, ignoreBounds } = stickyVars.get()
 
   if (ignoreBounds) {
-    stickyStore.set('distance', limit - start - offsets.end)
+    stickyVars.set('distance', limit - start - offsets.end)
     return
   }
 
@@ -18,7 +18,7 @@ const getDistance = (appStore, stickyStore) => {
   const parentAspect = layoutHorizontal ? parentRect.width : parentRect.height
   const selfAspect = layoutHorizontal ? elRect.width : elRect.height
 
-  stickyStore.set(
+  stickyVars.set(
     'distance',
     parentAspect - selfAspect - parentPadding - elMargin - offsets.end
   )

@@ -1,9 +1,9 @@
 import getProgress from '../utils/getProgress'
 import updateElementClass from '../utils/updateElementClass'
 
-const tweenUpdate = (appStore, tweenStore) => {
-  const { scroll } = appStore.get()
-  const { el, timeline, start, distance, peak, callback } = tweenStore.get()
+const tweenUpdate = (controllerVars, tweenVars) => {
+  const { scroll } = controllerVars.get()
+  const { el, timeline, start, distance, peak, callback } = tweenVars.get()
 
   const progress = getProgress(start, distance, scroll)
 

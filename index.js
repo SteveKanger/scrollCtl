@@ -1,4 +1,4 @@
-import createStore from './helpers/createStore'
+import createVars from './helpers/createVars'
 import handleRender from './handlers/handleRender'
 import handleUpdate from './handlers/handleUpdate'
 import handleInitialize from './handlers/handleInitialize'
@@ -14,13 +14,13 @@ import handleScrollToElement from './handlers/handleScrollToElement'
 import debounce from './utils/debounce'
 import isElement from './utils/isElement'
 
-const scrollController = (opts) => {
+const controller = (opts) => {
   if (!isElement(opts.container))
     throw new Error(
       'A valid container element is required to initialize the scroll controller'
     )
 
-  const appStore = createStore({
+  const controllerVars = createVars({
     initialized: false,
     listeners: null,
     scrollbar: null,
@@ -43,23 +43,31 @@ const scrollController = (opts) => {
     },
   })
 
-  const update = () => handleUpdate(appStore)
-  const render = (e) => handleRender(appStore, update, e)
-  const resize = debounce(() => handleResize(appStore), 100)
-  const initialize = () => handleInitialize(appStore, render, resize, opts)
-  const recalibrate = () => handleRecalibrate(appStore)
-  const getScroll = () => appStore.get().scroll
-  const on = (e, fn) => appStore.get().listeners.on(e, fn)
-  const off = (e, fn) => appStore.get().listeners.off(e, fn)
-  const kill = () => handleKill(appStore, resize)
-  const addTween = (data) => handleAddTween(appStore, data)
-  const addSticky = (data) => handleAddSticky(appStore, data)
-  const removeItem = (id) => handleRemoveItem(appStore, id)
-  const modifyItem = (id, data) => handleModifyItem(appStore, id, data)
+  const update = () => handleUpdate(controllerVars)
+  const render = (e) => handleRender(controllerVars, update, e)
+  const resize = debounce(() => handleResize(controllerVars), 100)
+  const initialize = () =>
+    handleInitialize(controllerVars, render, resize, opts)
+  const recalibrate = () => handleRecalibrate(controllerVars)
+  const getScroll = () => controllerVars.get().scroll
+  const on = (e, fn) => controllerVars.get().listeners.on(e, fn)
+  const off = (e, fn) => controllerVars.get().listeners.off(e, fn)
+  const kill = () => handleKill(controllerVars, resize)
+  const addTween = (data) => handleAddTween(controllerVars, data)
+  const addSticky = (data) => handleAddSticky(controllerVars, data)
+  const removeItem = (id) => handleRemoveItem(controllerVars, id)
+  const modifyItem = (id, data) => handleModifyItem(controllerVars, id, data)
   const scrollTo = (position, useAnimation) =>
-    handleScrollTo(appStore, update, render, position, useAnimation)
+    handleScrollTo(controllerVars, update, render, position, useAnimation)
   const scrollToElement = (el, offset, useAnimation) =>
-    handleScrollToElement(appStore, update, render, el, offset, useAnimation)
+    handleScrollToElement(
+      controllerVars,
+      update,
+      render,
+      el,
+      offset,
+      useAnimation
+    )
 
   initialize()
 
@@ -80,4 +88,4 @@ const scrollController = (opts) => {
   }
 }
 
-export default scrollController
+export default controller

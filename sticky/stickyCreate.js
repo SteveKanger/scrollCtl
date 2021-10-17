@@ -1,18 +1,18 @@
 import isElement from '../utils/isElement'
 import createId from '../utils/createId'
-import createStore from '../helpers/createStore'
+import createVars from '../helpers/createVars'
 import stickyUpdate from './stickyUpdate'
 import stickyConstruct from './stickyConstruct'
 import setData from './setData'
 import modifyData from './modifyData'
 
-const stickyCreate = (appStore, data) => {
+const stickyCreate = (controllerVars, data) => {
   if (!data.el || !isElement(data.el))
     throw new Error(
       'You need to specify a valid dom node to add a tween to controller'
     )
 
-  const stickyStore = createStore({
+  const stickyVars = createVars({
     el: null,
     start: 0,
     distance: 0,
@@ -22,15 +22,15 @@ const stickyCreate = (appStore, data) => {
   })
 
   const id = createId()
-  setData(stickyStore, data)
+  setData(stickyVars, data)
 
-  const construct = () => stickyConstruct(appStore, stickyStore)
-  const update = () => stickyUpdate(appStore, stickyStore)
+  const construct = () => stickyConstruct(controllerVars, stickyVars)
+  const update = () => stickyUpdate(controllerVars, stickyVars)
   const kill = () => {}
   const recalibrate = () => construct()
 
   const modify = (newData) => {
-    modifyData(stickyStore, newData)
+    modifyData(stickyVars, newData)
     construct()
     update()
   }

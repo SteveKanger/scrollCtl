@@ -2,14 +2,14 @@ import isElement from '../utils/isElement'
 import handleScrollTo from './handleScrollTo'
 
 const handleScrollToElement = (
-  appStore,
+  controllerVars,
   update,
   render,
   el,
   offset = 0,
   useAnimation = true
 ) => {
-  const { options, scroll } = appStore.get()
+  const { options, scroll } = controllerVars.get()
   const { layoutHorizontal, viewport } = options
 
   let viewportTop
@@ -22,7 +22,7 @@ const handleScrollToElement = (
   let elOffset = layoutHorizontal ? rect.left : rect.top
   let position = elOffset + scroll - offset - viewportTop
 
-  handleScrollTo(appStore, update, render, position, useAnimation)
+  handleScrollTo(controllerVars, update, render, position, useAnimation)
 }
 
 export default handleScrollToElement

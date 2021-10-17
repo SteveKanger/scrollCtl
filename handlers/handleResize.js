@@ -1,5 +1,5 @@
-const handleResize = (appStore) => {
-  const { container, scrollbar, items } = appStore.get()
+const handleResize = (controllerVars) => {
+  const { container, scrollbar, items } = controllerVars.get()
 
   if (scrollbar) scrollbar.recalibrate()
   container.recalibrate()
