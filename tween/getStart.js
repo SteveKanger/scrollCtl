@@ -2,9 +2,9 @@ import getViewportHeight from '../utils/getViewportHeight'
 import getOffsetStart from '../utils/getOffsetStart'
 import inInitialView from '../utils/inInitialView'
 
-const getStart = (controllerVars, tweenVars) => {
-  const { container, viewport, layoutHorizontal } = controllerVars.get().options
-  const { trigger, offsets } = tweenVars.get()
+const getStart = (ctlStore, tweenStore) => {
+  const { container, viewport, layoutHorizontal } = ctlStore.get().options
+  const { trigger, offsets } = tweenStore.get()
 
   const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
   const offsetStart = getOffsetStart(trigger, container, layoutHorizontal)

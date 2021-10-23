@@ -6,10 +6,10 @@ gsap.defaults({
   duration: 1,
 })
 
-const setData = (tweenVars, data) => {
+const setData = (tweenStore, data) => {
   const {
     el,
-    to,
+    to = {},
     from = {},
     start = 0,
     distance = 0,
@@ -25,18 +25,18 @@ const setData = (tweenVars, data) => {
     .fromTo(data.el, from, to)
     .progress(0)
 
-  tweenVars.set('data', data)
-  tweenVars.set('timeline', timeline)
-  tweenVars.set('to', to)
-  tweenVars.set('from', from)
-  tweenVars.set('start', start)
-  tweenVars.set('distance', distance)
-  tweenVars.set('el', el)
-  tweenVars.set('trigger', trigger || el)
-  tweenVars.set('offsets', parseOffsets(offsets))
-  tweenVars.set('ignoreIntialView', ignoreInitialView)
-  tweenVars.set('peak', peak)
-  tweenVars.set('callback', callback)
+  tweenStore.set('data', data)
+  tweenStore.set('timeline', timeline)
+  tweenStore.set('to', to)
+  tweenStore.set('from', from)
+  tweenStore.set('start', start)
+  tweenStore.set('distance', distance)
+  tweenStore.set('el', el)
+  tweenStore.set('trigger', trigger || el)
+  tweenStore.set('offsets', parseOffsets(offsets))
+  tweenStore.set('ignoreIntialView', ignoreInitialView)
+  tweenStore.set('peak', peak)
+  tweenStore.set('callback', callback)
 }
 
 export default setData

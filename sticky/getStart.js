@@ -1,11 +1,11 @@
 import getOffsetStart from '../utils/getOffsetStart'
 
-const getStart = (controllerVars, stickyVars) => {
-  const { el, offsets } = stickyVars.get()
-  const { container, layoutHorizontal } = controllerVars.get().options
+const getStart = (ctlStore, stickyStore) => {
+  const { el, offsets } = stickyStore.get()
+  const { container, layoutHorizontal } = ctlStore.get().options
 
   const offsetStart = getOffsetStart(el, container, layoutHorizontal)
-  stickyVars.set('start', offsetStart - offsets.start)
+  stickyStore.set('start', offsetStart - offsets.start)
 }
 
 export default getStart

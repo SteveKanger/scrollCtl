@@ -1,8 +1,8 @@
 import tweenCreate from '../tween/tweenCreate'
 
-const handleAddTween = (controllerVars, data) => {
-  const { items } = controllerVars.get()
-  const tween = tweenCreate(controllerVars, data)
+const handleAddTween = (ctlStore, data) => {
+  const { items } = ctlStore.get()
+  const tween = tweenCreate(ctlStore, data)
   items.push(tween)
   return tween.id
 }

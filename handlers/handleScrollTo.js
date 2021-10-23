@@ -1,19 +1,19 @@
 const handleScrollTo = (
-  controllerVars,
+  ctlStore,
   update,
   render,
   position,
   useAnimation = true
 ) => {
-  const { limit, delta } = controllerVars.get()
+  const { limit, delta } = ctlStore.get()
   if (useAnimation) {
     const deltaY = -(position - delta)
     render({ deltaY })
   } else {
     if (position > limit) position = limit
     else if (position < 0) position = 0
-    controllerVars.set('scroll', position)
-    controllerVars.set('delta', position)
+    ctlStore.set('scroll', position)
+    ctlStore.set('delta', position)
     update()
   }
 }

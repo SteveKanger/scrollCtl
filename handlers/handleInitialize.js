@@ -3,15 +3,15 @@ import createScrollbar from '../helpers/createScrollbar'
 import createOptions from '../helpers/createOptions'
 import createListeners from '../helpers/createListeners'
 
-const handleInitialize = (controllerVars, render, resize, opts) => {
-  const { initialized } = controllerVars.get()
+const handleInitialize = (ctlStore, render, resize, opts) => {
+  const { initialized } = ctlStore.get()
 
   if (!initialized) {
-    controllerVars.set('initialized', true)
-    controllerVars.set('options', createOptions(opts))
-    controllerVars.set('container', createContainer(controllerVars, render))
-    controllerVars.set('scrollbar', createScrollbar(controllerVars, render))
-    controllerVars.set('listeners', createListeners())
+    ctlStore.set('initialized', true)
+    ctlStore.set('options', createOptions(opts))
+    ctlStore.set('container', createContainer(ctlStore, render))
+    ctlStore.set('scrollbar', createScrollbar(ctlStore, render))
+    ctlStore.set('listeners', createListeners())
     window.addEventListener('resize', resize)
   }
 }

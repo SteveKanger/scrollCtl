@@ -1,7 +1,7 @@
-const handleRemoveItem = (controllerVars, id) => {
+const handleRemoveItem = (ctlStore, id) => {
   if (!id) throw new Error('Id is required to remove from controller')
 
-  const { items } = controllerVars.get()
+  const { items } = ctlStore.get()
   const idx = items.findIndex((item) => item.id === id)
 
   if (idx > -1) {

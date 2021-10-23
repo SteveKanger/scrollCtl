@@ -1,6 +1,5 @@
-const handleUpdate = (controllerVars) => {
-  const { container, scrollbar, items, listeners, scroll } =
-    controllerVars.get()
+const handleUpdate = (ctlStore) => {
+  const { container, scrollbar, items, listeners, scroll } = ctlStore.get()
 
   if (scrollbar) scrollbar.update()
   container.update()

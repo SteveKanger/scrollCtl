@@ -1,7 +1,7 @@
-const handleRecalibrate = (controllerVars) => {
-  const { items, container, scrollbar } = controllerVars.get()
+const handleRecalibrate = (ctlStore) => {
+  const { items, container, scrollbar } = ctlStore.get()
   const recalibratedItems = items.map((item) => item.recalibrate())
-  controllerVars.set('items', recalibratedItems)
+  ctlStore.set('items', recalibratedItems)
 
   container.recalibrate()
   if (scrollbar) scrollbar.recalibrate()

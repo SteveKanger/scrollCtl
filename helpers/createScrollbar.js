@@ -1,11 +1,11 @@
 import VirtualScroll from './VirtualScroll'
-import createVars from './createVars'
+import createStore from './createStore'
 
-const createScrollbar = (controllerVars, render) => {
-  const { options } = controllerVars.get()
+const createScrollbar = (ctlStore, render) => {
+  const { options } = ctlStore.get()
   if (!options.scrollbar) return
 
-  const scrollbarVars = createVars({
+  const scrollbarStore = createStore({
     bar: null,
     track: null,
     trackRect: null,
@@ -18,7 +18,7 @@ const createScrollbar = (controllerVars, render) => {
   })
 
   const isVertical = () => {
-    const { trackRect } = scrollbarVars.get()
+    const { trackRect } = scrollbarStore.get()
     return (
       trackRect.height > trackRect.width || trackRect.height === trackRect.width
     )
@@ -39,8 +39,8 @@ const createScrollbar = (controllerVars, render) => {
 
   const onMove = (e) => {
     e.stopPropagation()
-    const { trackRect } = scrollbarVars.get()
-    let { limit, delta } = controllerVars.get()
+    const { trackRect } = scrollbarStore.get()
+    let { limit, delta } = ctlStore.get()
 
     let pos = 0
     let deltaY
@@ -64,8 +64,8 @@ const createScrollbar = (controllerVars, render) => {
     track.style.height = '100%'
     track.style.overflow = 'hidden'
     options.scrollbar.appendChild(track)
-    scrollbarVars.set('track', track)
-    scrollbarVars.set('trackRect', track.getBoundingClientRect())
+    scrollbarStore.set('track', track)
+    scrollbarStore.set('trackRect', track.getBoundingClientRect())
 
     const bar = document.createElement('span')
     bar.classList = 'bar'
@@ -77,7 +77,7 @@ const createScrollbar = (controllerVars, render) => {
     bar.style.bottom = isVertical() ? '100%' : '0'
     bar.style.pointerEvents = 'none'
     track.appendChild(bar)
-    scrollbarVars.set('bar', bar)
+    scrollbarStore.set('bar', bar)
 
     track.addEventListener('mousedown', onMouseDown)
     window.addEventListener('mouseup', onMouseUp)
@@ -85,7 +85,7 @@ const createScrollbar = (controllerVars, render) => {
   }
 
   const kill = () => {
-    const { track } = scrollbarVars.get()
+    const { track } = scrollbarStore.get()
     vs.off(render)
     track.removeEventListener('mousedown', onMouseDown)
     window.removeEventListener('mouseup', onMouseUp)
@@ -93,8 +93,8 @@ const createScrollbar = (controllerVars, render) => {
   }
 
   const update = () => {
-    const { scroll, limit } = controllerVars.get()
-    const { bar, trackRect } = scrollbarVars.get()
+    const { scroll, limit } = ctlStore.get()
+    const { bar, trackRect } = scrollbarStore.get()
     const scrollbarLimit = isVertical() ? trackRect.height : trackRect.width
 
     const pos = (scroll / limit) * scrollbarLimit
@@ -104,8 +104,8 @@ const createScrollbar = (controllerVars, render) => {
   }
 
   const recalibrate = () => {
-    const { track, bar } = scrollbarVars.get()
-    scrollbarVars.set('trackRect', track.getBoundingClientRect())
+    const { track, bar } = scrollbarStore.get()
+    scrollbarStore.set('trackRect', track.getBoundingClientRect())
 
     bar.style.right = isVertical() ? '0' : '100%'
     bar.style.bottom = isVertical() ? '100%' : '0'

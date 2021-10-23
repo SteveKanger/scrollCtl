@@ -1,4 +1,4 @@
-import createVars from './helpers/createVars'
+import createStore from './helpers/createStore'
 import handleRender from './handlers/handleRender'
 import handleUpdate from './handlers/handleUpdate'
 import handleInitialize from './handlers/handleInitialize'
@@ -20,7 +20,7 @@ const controller = (opts) => {
       'A valid container element is required to initialize the scroll controller'
     )
 
-  const controllerVars = createVars({
+  const ctlStore = createStore({
     initialized: false,
     listeners: null,
     scrollbar: null,
@@ -43,31 +43,23 @@ const controller = (opts) => {
     },
   })
 
-  const update = () => handleUpdate(controllerVars)
-  const render = (e) => handleRender(controllerVars, update, e)
-  const resize = debounce(() => handleResize(controllerVars), 100)
-  const initialize = () =>
-    handleInitialize(controllerVars, render, resize, opts)
-  const recalibrate = () => handleRecalibrate(controllerVars)
-  const getScroll = () => controllerVars.get().scroll
-  const on = (e, fn) => controllerVars.get().listeners.on(e, fn)
-  const off = (e, fn) => controllerVars.get().listeners.off(e, fn)
-  const kill = () => handleKill(controllerVars, resize)
-  const addTween = (data) => handleAddTween(controllerVars, data)
-  const addSticky = (data) => handleAddSticky(controllerVars, data)
-  const removeItem = (id) => handleRemoveItem(controllerVars, id)
-  const modifyItem = (id, data) => handleModifyItem(controllerVars, id, data)
+  const on = (e, fn) => ctlStore.get().listeners.on(e, fn)
+  const off = (e, fn) => ctlStore.get().listeners.off(e, fn)
+  const update = () => handleUpdate(ctlStore)
+  const render = (e) => handleRender(ctlStore, update, e)
+  const resize = debounce(() => handleResize(ctlStore), 100)
+  const initialize = () => handleInitialize(ctlStore, render, resize, opts)
+  const recalibrate = () => handleRecalibrate(ctlStore)
+  const getScroll = () => ctlStore.get().scroll
+  const kill = () => handleKill(ctlStore, resize)
+  const addTween = (data) => handleAddTween(ctlStore, data)
+  const addSticky = (data) => handleAddSticky(ctlStore, data)
+  const removeItem = (id) => handleRemoveItem(ctlStore, id)
+  const modifyItem = (id, data) => handleModifyItem(ctlStore, id, data)
   const scrollTo = (position, useAnimation) =>
-    handleScrollTo(controllerVars, update, render, position, useAnimation)
+    handleScrollTo(ctlStore, update, render, position, useAnimation)
   const scrollToElement = (el, offset, useAnimation) =>
-    handleScrollToElement(
-      controllerVars,
-      update,
-      render,
-      el,
-      offset,
-      useAnimation
-    )
+    handleScrollToElement(ctlStore, update, render, el, offset, useAnimation)
 
   initialize()
 

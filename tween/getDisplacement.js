@@ -1,8 +1,8 @@
 import getViewportHeight from '../utils/getViewportHeight'
 
-const getDisplacement = (controllerVars, tweenVars) => {
-  const { el, trigger, peak, timeline } = tweenVars.get()
-  const { viewport, layoutHorizontal } = controllerVars.get().options
+const getDisplacement = (ctlStore, tweenStore) => {
+  const { el, trigger, peak, timeline } = tweenStore.get()
+  const { viewport, layoutHorizontal } = ctlStore.get().options
   const viewportHeight = getViewportHeight(viewport, layoutHorizontal)
 
   if (trigger !== el || peak < 1) {

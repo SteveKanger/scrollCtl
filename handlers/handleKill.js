@@ -1,5 +1,5 @@
-const handleKill = (controllerVars, resize) => {
-  const { listeners, container, scrollbar, items } = controllerVars.get()
+const handleKill = (ctlStore, resize) => {
+  const { listeners, container, scrollbar, items } = ctlStore.get()
 
   if (scrollbar) scrollbar.kill()
   container.kill()

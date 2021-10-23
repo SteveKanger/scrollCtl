@@ -1,4 +1,4 @@
-import createVars from '../helpers/createVars'
+import createStore from '../helpers/createStore'
 import createId from '../utils/createId'
 import tweenConstruct from './tweenConstruct'
 import tweenUpdate from './tweenUpdate'
@@ -6,16 +6,13 @@ import isElement from '../utils/isElement'
 import setData from './setData'
 import modifyData from './modifyData'
 
-const tweenCreate = (controllerVars, data) => {
-  if (!data.to)
-    throw new Error('You need to specify a -- to -- object for tweening')
-
+const tweenCreate = (ctlStore, data) => {
   if (!data.el || !isElement(data.el))
     throw new Error(
       'You need to specify a valid dom node to add a tween to controller'
     )
 
-  const tweenVars = createVars({
+  const tweenStore = createStore({
     data: null,
     el: null,
     to: {},
@@ -35,13 +32,13 @@ const tweenCreate = (controllerVars, data) => {
   })
 
   const id = createId()
-  setData(tweenVars, data)
+  setData(tweenStore, data)
 
-  const construct = () => tweenConstruct(controllerVars, tweenVars)
-  const update = () => tweenUpdate(controllerVars, tweenVars)
+  const construct = () => tweenConstruct(ctlStore, tweenStore)
+  const update = () => tweenUpdate(ctlStore, tweenStore)
 
   const kill = () => {
-    const { timeline } = tweenVars.get()
+    const { timeline } = tweenStore.get()
     timeline.kill()
   }
 
@@ -51,7 +48,7 @@ const tweenCreate = (controllerVars, data) => {
   }
 
   const modify = (newData) => {
-    modifyData(tweenVars, newData)
+    modifyData(tweenStore, newData)
     construct()
     update()
   }

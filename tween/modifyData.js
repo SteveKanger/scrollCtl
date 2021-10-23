@@ -1,6 +1,6 @@
 import parseOffsets from '../utils/parseOffsets'
 
-const modifyData = (tweenVars, data) => {
+const modifyData = (tweenStore, data) => {
   const {
     el,
     to,
@@ -14,21 +14,21 @@ const modifyData = (tweenVars, data) => {
     callback,
   } = data
 
-  tweenVars.set('data', data)
-  if (el) tweenVars.set('el', el)
-  if (to) tweenVars.set('to', to)
-  if (from) tweenVars.set('from', from)
-  if (start) tweenVars.set('start', start)
-  if (distance) tweenVars.set('distance', distance)
-  if (trigger) tweenVars.set('trigger', trigger)
-  if (offsets) tweenVars.set('offsets', parseOffsets(offsets))
+  tweenStore.set('data', data)
+  if (el) tweenStore.set('el', el)
+  if (to) tweenStore.set('to', to)
+  if (from) tweenStore.set('from', from)
+  if (start) tweenStore.set('start', start)
+  if (distance) tweenStore.set('distance', distance)
+  if (trigger) tweenStore.set('trigger', trigger)
+  if (offsets) tweenStore.set('offsets', parseOffsets(offsets))
   if (ignoreInitialView !== undefined)
-    tweenVars.set('ignoreIntialView', ignoreInitialView)
-  if (peak) tweenVars.set('peak', peak)
-  if (callback) tweenVars.set('callback', callback)
+    tweenStore.set('ignoreIntialView', ignoreInitialView)
+  if (peak) tweenStore.set('peak', peak)
+  if (callback) tweenStore.set('callback', callback)
 
   if (to || from) {
-    const { el, timeline, to, from } = tweenVars.get()
+    const { el, timeline, to, from } = tweenStore.get()
     timeline.progress(0).clear().fromTo(el, from, to)
   }
 }
